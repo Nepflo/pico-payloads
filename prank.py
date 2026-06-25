@@ -19,8 +19,16 @@ class FsocietyScreen:
         self.glitch_active = True
         self.blink_state = True
         
+        # WICHTIG: Zuerst Matrix-Rain Canvas erstellen (im Hintergrund)
+        self.rain_canvas = tk.Canvas(self.root, bg='black', highlightthickness=0)
+        self.rain_canvas.place(x=0, y=0, relwidth=1, relheight=1)
+        
+        # Dann CRT-Effekt darüber
         self.setup_crt_effect()
+        
+        # Dann das Main Frame (im Vordergrund)
         self.setup_ui()
+        
         self.start_effects()
         
         self.root.bind('<Escape>', lambda e: self.root.destroy())
@@ -36,6 +44,9 @@ class FsocietyScreen:
     def setup_ui(self):
         self.main_frame = tk.Frame(self.root, bg='black')
         self.main_frame.place(relx=0.5, rely=0.5, anchor='center')
+        
+        # Frame in den Vordergrund bringen (über die Canvas-Elemente)
+        self.main_frame.lift()
         
         mask_ascii = """
             ████████████            
@@ -230,7 +241,6 @@ are now under our control."""
             time.sleep(random.uniform(0.5, 2.0))
             try:
                 line = random.choice(self.slogan_labels)
-                original = line.cget("text")
                 line.config(fg='#ffffff')
                 time.sleep(0.1)
                 line.config(fg=random.choice(colors))
@@ -272,10 +282,7 @@ are now under our control."""
                 return
 
     def matrix_rain(self):
-        rain_canvas = tk.Canvas(self.root, bg='black', highlightthickness=0)
-        rain_canvas.place(x=0, y=0, relwidth=1, relheight=1)
-        rain_canvas.lower(self.main_frame)
-        
+        # Verwende das bereits erstellte rain_canvas
         chars = "日ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ0123456789:><[]{}|\\"
         colors = ['#00ff41', '#00dd33', '#00bb22', '#009911', '#007700', '#005500', '#003300']
         drops = []
@@ -298,7 +305,7 @@ are now under our control."""
                         drop['y'] = random.randint(-500, -50)
                         drop['speed'] = random.randint(4, 20)
                         for char_id in drop['chars']:
-                            rain_canvas.delete(char_id)
+                            self.rain_canvas.delete(char_id)
                         drop['chars'] = []
                     
                     if random.random() > 0.75:
@@ -306,14 +313,14 @@ are now under our control."""
                         color_idx = min(len(drop['chars']), len(colors)-1)
                         color = colors[color_idx]
                         
-                        text_id = rain_canvas.create_text(drop['x'], drop['y'], 
+                        text_id = self.rain_canvas.create_text(drop['x'], drop['y'], 
                                                           text=char, fill=color,
                                                           font=('Courier', 12))
                         drop['chars'].append(text_id)
                         
                         if len(drop['chars']) > drop['length']:
                             old_id = drop['chars'].pop(0)
-                            rain_canvas.delete(old_id)
+                            self.rain_canvas.delete(old_id)
                             
             except:
                 pass
