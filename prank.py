@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import tkinter as tk
-from tkinter import font
 import time
 import random
 import threading
@@ -28,22 +27,16 @@ class FsocietyScreen:
         self.root.bind('<Alt-F4>', lambda e: self.root.destroy())
 
     def setup_crt_effect(self):
-        """CRT Monitor Effect with scanlines"""
         self.scanline_canvas = tk.Canvas(self.root, bg='black', highlightthickness=0)
         self.scanline_canvas.place(x=0, y=0, relwidth=1, relheight=1)
         
         for y in range(0, self.height, 3):
             self.scanline_canvas.create_line(0, y, self.width, y, fill='#0a0a0a', width=1)
-        
-        self.glow_canvas = tk.Canvas(self.root, bg='', highlightthickness=0)
-        self.glow_canvas.place(x=0, y=0, relwidth=1, relheight=1)
 
     def setup_ui(self):
-        """Main UI with Anonymous/FSociety Style"""
         self.main_frame = tk.Frame(self.root, bg='black')
         self.main_frame.place(relx=0.5, rely=0.5, anchor='center')
         
-        # Guy Fawkes Mask ASCII Art (FSociety/Anonymous)
         mask_ascii = """
             ████████████            
         ████░░░░░░░░░░████        
@@ -72,7 +65,6 @@ class FsocietyScreen:
                 ████                
 """
         
-        # Mask Frame
         self.mask_frame = tk.Frame(self.main_frame, bg='black')
         self.mask_frame.pack(pady=(0, 20))
         
@@ -81,7 +73,6 @@ class FsocietyScreen:
                                    justify='center', padx=10)
         self.mask_label.pack()
         
-        # Slogan Text
         self.slogan_frame = tk.Frame(self.main_frame, bg='black')
         self.slogan_frame.pack(pady=10)
         
@@ -94,22 +85,20 @@ class FsocietyScreen:
         ]
         
         self.slogan_labels = []
+        colors = ['#00ff41', '#ff0040', '#00ff41', '#ff0040', '#00ff41']
         for i, text in enumerate(slogans):
             lbl = tk.Label(self.slogan_frame, text=text,
                           font=('Courier', 14, 'bold'), bg='black', 
-                          fg='#00ff41' if i % 2 == 0 else '#ff0040')
+                          fg=colors[i])
             lbl.pack(pady=2)
             self.slogan_labels.append(lbl)
         
-        # Separator line
         sep = tk.Frame(self.main_frame, bg='#00ff41', height=2, width=600)
         sep.pack(pady=20)
         
-        # Main Title with heavy glitch
         self.title_container = tk.Frame(self.main_frame, bg='black')
         self.title_container.pack(pady=15)
         
-        # Multiple layers for glitch effect
         self.title_bg = tk.Label(self.title_container, text="SYSTEM HACKED",
                                 font=('Courier', 42, 'bold'), bg='black', fg='#ff0040')
         self.title_bg.pack()
@@ -122,13 +111,11 @@ class FsocietyScreen:
                                   font=('Courier', 42, 'bold'), bg='black', fg='#ffffff')
         self.title_main.place(relx=0.5, rely=0.5, anchor='center')
         
-        # Subtitle
         self.subtitle = tk.Label(self.main_frame, 
                                  text="[!] YOUR PRIVACY HAS BEEN COMPROMISED [!]",
                                  font=('Courier', 16, 'bold'), bg='black', fg='#ff6600')
         self.subtitle.pack(pady=10)
         
-        # Terminal Box
         self.term_frame = tk.Frame(self.main_frame, bg='#0a0a0a', 
                                    highlightbackground='#ff0040',
                                    highlightthickness=2, padx=25, pady=20)
@@ -154,13 +141,11 @@ are now under our control."""
                                    justify='left', padx=10, pady=10)
         self.term_label.pack()
         
-        # Blinking cursor
         self.cursor_label = tk.Label(self.term_frame, text="_", 
                                     font=('Courier', 14, 'bold'),
                                     bg='#0a0a0a', fg='#00ff41')
         self.cursor_label.place(relx=0.95, rely=0.95, anchor='se')
         
-        # Bitcoin Section
         btc_frame = tk.Frame(self.main_frame, bg='black', padx=20, pady=10)
         btc_frame.pack(pady=15)
         
@@ -177,7 +162,6 @@ are now under our control."""
                                 font=('Courier', 18, 'bold'), bg='black', fg='#ffff00')
         self.btc_addr.pack(pady=5)
         
-        # Countdown
         timer_title = tk.Label(self.main_frame, text="TIME UNTIL PERMANENT DELETION:",
                               font=('Courier', 14), bg='black', fg='#ff0040')
         timer_title.pack(pady=(20, 5))
@@ -186,7 +170,6 @@ are now under our control."""
                                      font=('Courier', 56, 'bold'), bg='black', fg='#ff0040')
         self.timer_display.pack()
         
-        # Progress bar with border
         self.progress_frame = tk.Frame(self.main_frame, bg='#ff0040', padx=2, pady=2)
         self.progress_frame.pack(pady=10)
         
@@ -197,7 +180,6 @@ are now under our control."""
                                                                 fill='#ff0040',
                                                                 outline='')
         
-        # Warning
         self.warning = tk.Label(self.main_frame,
                                 text="⚠ DO NOT ATTEMPT TO CLOSE THIS WINDOW ⚠\n"
                                      "⚠ DO NOT RESTART OR SHUTDOWN ⚠\n"
@@ -206,14 +188,12 @@ are now under our control."""
                                 justify='center', pady=20)
         self.warning.pack()
         
-        # Bottom text
         self.sig = tk.Label(self.root, text="[ HACKED BY NEPFLO | ANONYMOUS | FSOCIETY ]",
                             font=('Courier', 11), bg='black', fg='#00ff41',
                             anchor='se')
         self.sig.place(relx=1.0, rely=1.0, anchor='se', x=-30, y=-30)
 
     def start_effects(self):
-        """Start all animations"""
         threading.Thread(target=self.heavy_glitch_effect, daemon=True).start()
         threading.Thread(target=self.matrix_rain, daemon=True).start()
         threading.Thread(target=self.pulse_timer, daemon=True).start()
@@ -223,21 +203,16 @@ are now under our control."""
         threading.Thread(target=self.scanline_move, daemon=True).start()
 
     def heavy_glitch_effect(self):
-        """Intense glitch effects"""
+        colors = ['#ff0040', '#00ff41', '#ffffff', '#ff6600', '#ff0000', '#00ffff', '#ffff00']
         while self.glitch_active:
             time.sleep(random.uniform(0.05, 0.15))
             try:
-                # Random offsets for glitch
                 x_offset = random.choice([-4, -2, 0, 2, 4])
                 y_offset = random.choice([-4, -2, 0, 2, 4])
                 
                 self.title_glitch1.place_configure(x=-2+x_offset, y=-2+y_offset)
-                
-                # Color cycling
-                colors = ['#ff0040', '#00ff41', '#ffffff', '#ff6600', '#ff0000', '#00ffff']
                 self.title_bg.config(fg=random.choice(colors))
                 
-                # Occasional text corruption
                 if random.random() > 0.92:
                     original = "SYSTEM HACKED"
                     corrupted = ''.join(random.choice(['▓', '▒', '░', '█', '▀', '▄', '▌', '▐']) 
@@ -250,43 +225,30 @@ are now under our control."""
                 pass
 
     def slogan_glitch(self):
-        """Randomly glitch slogan lines"""
+        colors = ['#00ff41', '#ff0040', '#ffffff']
         while True:
             time.sleep(random.uniform(0.5, 2.0))
             try:
                 line = random.choice(self.slogan_labels)
                 original = line.cget("text")
-                
-                # Flash effect
                 line.config(fg='#ffffff')
                 time.sleep(0.1)
-                line.config(fg='#00ff41' if "We are" in original or "do not forget" in original else '#ff0040')
-                
+                line.config(fg=random.choice(colors))
             except:
                 pass
 
     def pulse_timer(self):
-        """Pulse effect on timer"""
+        colors = ['#ff0040', '#ff2244', '#ff4466', '#ff6688', '#ff88aa', '#ff6688', '#ff4466', '#ff2244']
+        idx = 0
         while True:
-            for i in range(0, 100, 10):
-                try:
-                    intensity = int(255 - i * 2)
-                    color = f'#{intensity:02x}0040'
-                    self.timer_display.config(fg=color)
-                    time.sleep(0.05)
-                except:
-                    return
-            for i in range(100, 0, -10):
-                try:
-                    intensity = int(255 - i * 2)
-                    color = f'#{intensity:02x}0040'
-                    self.timer_display.config(fg=color)
-                    time.sleep(0.05)
-                except:
-                    return
+            try:
+                self.timer_display.config(fg=colors[idx % len(colors)])
+                idx += 1
+                time.sleep(0.1)
+            except:
+                return
 
     def blink_cursor(self):
-        """Blinking terminal cursor"""
         while True:
             try:
                 self.cursor_label.config(fg='#0a0a0a' if self.blink_state else '#00ff41')
@@ -296,7 +258,6 @@ are now under our control."""
                 return
 
     def scanline_move(self):
-        """Moving CRT scanline"""
         scanline = self.scanline_canvas.create_rectangle(0, 0, self.width, 8,
                                                         fill='#00ff41', 
                                                         stipple='gray50',
@@ -311,12 +272,12 @@ are now under our control."""
                 return
 
     def matrix_rain(self):
-        """Enhanced Matrix rain"""
         rain_canvas = tk.Canvas(self.root, bg='black', highlightthickness=0)
         rain_canvas.place(x=0, y=0, relwidth=1, relheight=1)
         rain_canvas.lower(self.main_frame)
         
         chars = "日ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ0123456789:><[]{}|\\"
+        colors = ['#00ff41', '#00dd33', '#00bb22', '#009911', '#007700', '#005500', '#003300']
         drops = []
         
         for x in range(0, self.width, 18):
@@ -342,8 +303,8 @@ are now under our control."""
                     
                     if random.random() > 0.75:
                         char = random.choice(chars)
-                        colors = ['#00ff41', '#00dd33', '#00bb22', '#009911', '#007700', '#005500', '#003300']
-                        color = colors[min(len(drop['chars']), len(colors)-1)]
+                        color_idx = min(len(drop['chars']), len(colors)-1)
+                        color = colors[color_idx]
                         
                         text_id = rain_canvas.create_text(drop['x'], drop['y'], 
                                                           text=char, fill=color,
@@ -362,7 +323,6 @@ are now under our control."""
         animate()
 
     def update_timer(self):
-        """Update countdown timer"""
         while self.time_left > 0:
             hours = self.time_left // 3600
             minutes = (self.time_left % 3600) // 60
@@ -371,10 +331,8 @@ are now under our control."""
             time_str = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
             try:
                 self.timer_display.config(text=time_str)
-                
                 progress = 596 * (self.time_left / 3599)
                 self.progress_canvas.coords(self.progress_fill, 0, 0, progress, 21)
-                
             except:
                 return
             
