@@ -12,25 +12,21 @@ class HackedScreen:
         self.root.configure(bg='black')
         self.root.attributes('-topmost', True)
         
-        # Verhindert Alt+F4 (optional - entfernen wenn nicht gewünscht)
-        # self.root.protocol("WM_DELETE_WINDOW", lambda: None)
-        
-        self.time_left = 3599  # 1 Stunde in Sekunden
+        self.time_left = 3599
         
         self.setup_ui()
         self.glitch_effect()
         self.update_timer()
         
     def setup_ui(self):
-        # Hauptframe
         frame = tk.Frame(self.root, bg='black')
         frame.place(relx=0.5, rely=0.5, anchor='center')
         
-        # Schädel Emoji
+        # Schädel
         skull = tk.Label(frame, text="☠️", font=('Courier', 72), bg='black', fg='red')
         skull.pack()
         
-        # HACKED Text mit Glitch-Effekt
+        # HACKED Text
         self.title_label = tk.Label(frame, text="SYSTEM HACKED", 
                                     font=('Courier', 64, 'bold'), 
                                     bg='black', fg='red')
@@ -58,8 +54,9 @@ Time remaining before PERMANENT DELETION..."""
                           wraplength=800)
         warning.pack(pady=30)
         
-        # Progress Bar (fake)
-        self.progress = tk.Canvas(frame, width=600, height=30, bg='black', highlightthickness=2, highlightbackground='red')
+        # Progress Bar
+        self.progress = tk.Canvas(frame, width=600, height=30, bg='black', 
+                                  highlightthickness=2, highlightbackground='red')
         self.progress.pack(pady=20)
         self.progress_fill = self.progress.create_rectangle(0, 0, 0, 30, fill='red')
         
@@ -70,7 +67,7 @@ Time remaining before PERMANENT DELETION..."""
                             anchor='se')
         hacked_by.place(relx=1.0, rely=1.0, anchor='se', x=-20, y=-20)
         
-        # Matrix-Regen im Hintergrund (optional)
+        # Matrix Hintergrund
         self.canvas = tk.Canvas(self.root, bg='black', highlightthickness=0)
         self.canvas.place(x=0, y=0, relwidth=1, relheight=1)
         self.canvas.lower(self.canvas)
@@ -79,22 +76,17 @@ Time remaining before PERMANENT DELETION..."""
         self.start_matrix()
         
     def glitch_effect(self):
-        """Glitch-Effekt für den Titel"""
         colors = ['red', '#ff00ff', '#00ffff', 'red', 'darkred']
-        offsets = [0, 2, -2, 0]
         
         def glitch():
             while True:
                 time.sleep(0.1)
                 color = random.choice(colors)
                 self.title_label.config(fg=color)
-                x_offset = random.choice(offsets)
-                self.title_label.place_configure(relx=0.5 + x_offset/1000)
                 
         threading.Thread(target=glitch, daemon=True).start()
         
     def update_timer(self):
-        """Countdown aktualisieren"""
         hours = self.time_left // 3600
         minutes = (self.time_left % 3600) // 60
         seconds = self.time_left % 60
@@ -102,7 +94,6 @@ Time remaining before PERMANENT DELETION..."""
         time_str = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
         self.timer_label.config(text=time_str)
         
-        # Progress bar füllen (rückwärts)
         progress_width = 600 * (self.time_left / 3599)
         self.progress.coords(self.progress_fill, 0, 0, progress_width, 30)
         
@@ -111,8 +102,7 @@ Time remaining before PERMANENT DELETION..."""
             self.root.after(1000, self.update_timer)
             
     def start_matrix(self):
-        """Matrix-ähnlicher Code-Regen im Hintergrund"""
-        chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン"
+        chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノ"
         
         class MatrixDrop:
             def __init__(self, canvas, x):
